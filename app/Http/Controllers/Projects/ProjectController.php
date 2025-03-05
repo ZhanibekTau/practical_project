@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Attribute;
+namespace App\Http\Controllers\Projects;
 
 use App\Exceptions\AppException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Projects\UpdateFormRequest;
 use App\Http\Requests\Projects\CreateFormRequest;
+use App\Http\Requests\Projects\UpdateFormRequest;
 use App\Services\Projects\ProjectService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,10 +49,7 @@ class ProjectController extends Controller
      */
     public function create(CreateFormRequest $request): JsonResponse
     {
-        $userId = ['created_by' => $request->header('User_id')];
-        $params = array_merge($userId, $request->validated());
-
-        $result = $this->projectService->create($params);
+        $result = $this->projectService->create($request->validated());
 
         return $this->response($result);
     }
@@ -66,10 +63,7 @@ class ProjectController extends Controller
      */
     public function update(UpdateFormRequest $request, int $id): JsonResponse
     {
-        $userId = ['updated_by' => $request->header('User_id')];
-        $params = array_merge($userId, $request->validated());
-
-        $result = $this->projectService->update($id, $params);
+        $result = $this->projectService->update($id,  $request->validated());
 
         return $this->response($result);
     }

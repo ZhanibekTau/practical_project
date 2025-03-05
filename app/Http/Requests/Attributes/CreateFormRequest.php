@@ -4,7 +4,8 @@ namespace App\Http\Requests\Attributes;
 
 use App\Http\Requests\BaseFormRequest;
 
-class CreateFormRequest extends BaseFormRequest {
+class CreateFormRequest extends BaseFormRequest
+{
     /**
      * @return bool
      */

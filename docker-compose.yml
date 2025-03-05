@@ -72,7 +72,7 @@ services:
             db:
                 condition: service_healthy
         command: >
-            sh -c "chmod -R 775 /var/www/storage && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && php artisan migrate --force && php-fpm"
+            sh -c "php artisan passport:keys && chmod -R 775 /var/www/storage && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && php artisan migrate --force && php-fpm"
 
 volumes:
     db_data:

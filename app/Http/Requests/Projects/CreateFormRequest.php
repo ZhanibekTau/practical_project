@@ -4,7 +4,8 @@ namespace App\Http\Requests\Projects;
 
 use App\Http\Requests\BaseFormRequest;
 
-class CreateFormRequest extends BaseFormRequest {
+class CreateFormRequest extends BaseFormRequest
+{
     /**
      * @return bool
      */
@@ -18,6 +19,7 @@ class CreateFormRequest extends BaseFormRequest {
         return [
             'name' => 'required|string|max:255',
             'status' => 'required|in:active,completed,planned',
+            'created_by' => 'required|exists:users,id',
             'attributes' => 'required|array',
             'attributes.id' => 'required|exists:attributes,id',
             'attributes.value' => 'required|string|max:255',
