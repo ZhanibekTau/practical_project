@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Projects;
 
+use App\Exceptions\AppException;
 use App\Models\Project;
 use App\Repositories\Eloquent\IBaseRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ProjectRepository implements IBaseRepository
@@ -14,6 +16,16 @@ class ProjectRepository implements IBaseRepository
     public function __construct(Project $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Model|null
+     */
+    public function find($id): ?Model
+    {
+        return $this->model->find($id);
     }
 
     /**
@@ -31,10 +43,6 @@ class ProjectRepository implements IBaseRepository
             }
 
             $model = $this->model->create($data);
-            $model->users()->attach($data['user_id'], [
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
 
             $attributeData = $data['attributes'];
             $attributeValues = [
@@ -45,6 +53,51 @@ class ProjectRepository implements IBaseRepository
             ];
 
             $model->attributeValues()->create($attributeValues);
+
+            return $model->load('attributes.attribute');
+        });
+    }
+
+    /**
+     * @param int   $id
+     * @param int   $attributeId
+     * @param array $data
+     *
+     * @return Model
+     */
+    public function update(int $id, int $attributeId, array $data): Model
+    {
+        return DB::transaction(function () use ($id, $attributeId, $data) {
+            $model = $this->find($id);
+            if (!$model) {
+                throw new AppException(
+                    message: "Project with id: $id - not found",
+                    code: Response::HTTP_UNPROCESSABLE_ENTITY,
+                );
+            }
+
+            $model->update($data);
+
+            // Update attribute values if an attribute ID is provided
+            if ($attributeId != 0 && !empty($data['attributes'])) {
+                $attributeData = $data['attributes'];
+
+                $attributeValues = [
+                    'attribute_id' => $attributeData['id'],
+                    'value' => $attributeData['value'] ?? null,
+                    'entity_id' => $model->id,
+                    'entity_type' => get_class($model),
+                ];
+
+                $existingAttribute = $model->attributeValues()->where([
+                    ['attribute_id', $attributeId],
+                    ['entity_id', $model->id],
+                ])->first();
+
+                if (!$existingAttribute) {
+                    $model->attributeValues()->create($attributeValues);
+                }
+            }
 
             return $model->load('attributes.attribute');
         });

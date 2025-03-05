@@ -10,7 +10,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'status'];
+    protected $fillable = ['name', 'status', 'created_by', 'updated_by'];
 
     public function attributes()
     {
@@ -30,5 +30,15 @@ class Project extends Model
     public function timesheets()
     {
         return $this->hasMany(Timesheet::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }
