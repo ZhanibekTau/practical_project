@@ -11,6 +11,8 @@ Route::prefix('api')->group(function () {
     });
 
     Route::group(['prefix' => 'projects'], function () {
+        Route::get('', [ProjectController::class, 'index']);
+        Route::get('filter', [ProjectController::class, 'filter']);
         Route::post('attributes', [ProjectController::class, 'create']);
         Route::put('attributes/{id}', [ProjectController::class, 'update'])->where(['id' => '[0-9]+']);;
     });

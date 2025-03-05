@@ -5,6 +5,7 @@ namespace App\Repositories\Attributes;
 use App\Exceptions\AppException;
 use App\Models\Attribute;
 use App\Repositories\Eloquent\IBaseRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 
@@ -17,6 +18,14 @@ class AttributeRepository implements IBaseRepository {
     public function __construct(Attribute $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAll(): Collection
+    {
+        return $this->model->all();
     }
 
     /**

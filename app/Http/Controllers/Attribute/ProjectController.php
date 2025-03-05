@@ -8,6 +8,8 @@ use App\Http\Requests\Projects\UpdateFormRequest;
 use App\Http\Requests\Projects\CreateFormRequest;
 use App\Services\Projects\ProjectService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
 
 class ProjectController extends Controller
 {
@@ -17,6 +19,26 @@ class ProjectController extends Controller
     public function __construct(
         private ProjectService $projectService,
     ) {
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function index(Request $request): JsonResponse
+    {
+        return $this->response($this->projectService->getAllProjects($request->all()));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        return $this->response($this->projectService->filterProjects($request->all()));
     }
 
     /**

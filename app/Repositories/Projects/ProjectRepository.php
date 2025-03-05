@@ -2,12 +2,14 @@
 
 namespace App\Repositories\Projects;
 
+use App\Enums\ProjectsEnum;
 use App\Exceptions\AppException;
 use App\Models\Project;
 use App\Repositories\Eloquent\IBaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProjectRepository implements IBaseRepository
 {
@@ -16,6 +18,24 @@ class ProjectRepository implements IBaseRepository
     public function __construct(Project $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return array
+     */
+    public function getProjects(array $requestData): array
+    {
+        $perPage = isset($requestData['per_page']) && $requestData['per_page'] === 'all'
+            ? $this->model->count()
+            : ($requestData['per_page'] ?? 30);
+        $page = $requestData['page'] ?? 1;
+
+        return $this->model
+            ->paginate($perPage, ['*'], 'page', $page)
+            ->load('attributes.attribute')
+            ->toArray();
     }
 
     /**
@@ -101,5 +121,68 @@ class ProjectRepository implements IBaseRepository
 
             return $model->load('attributes.attribute');
         });
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return mixed[]
+     */
+    public function filter(array $data): array
+    {
+        $query = $this->model->newQuery()
+        ->select('projects.*');
+
+        if (!empty($data[ProjectsEnum::REGULAR_COLUMNS])) {
+            foreach ($data[ProjectsEnum::REGULAR_COLUMNS] as $column => $value) {
+                if (is_array($value)) {
+                    $operator = key($value);
+                    $val = $value[$operator];
+                    $query = $this->getBuilder($operator, $query, "projects.$column", $val);
+                } else {
+                    $query->where("projects.$column", '=', $value);
+                }
+            }
+        }
+
+        if (!empty($data[ProjectsEnum::EAV_COLUMNS])) {
+            $query->join('attribute_values', 'attribute_values.entity_id', '=', 'projects.id');
+            $query->join('attributes', 'attributes.id', '=', 'attribute_values.attribute_id');
+            foreach ($data[ProjectsEnum::EAV_COLUMNS] as $column => $value) {
+                $query->where('attributes.name', $column);
+
+                if (is_array($value)) {
+                    $operator = key($value);
+                    $val = $value[$operator];
+                    $query = $this->getBuilder($operator, $query, 'attribute_values.value', $val);
+                } else {
+                    $query->where('attribute_values.value', '=', $value);
+                }
+            }
+        }
+
+        return $query->with('attributes.attribute')->get()->toArray();
+    }
+
+    /**
+     * @param string  $operator
+     * @param Builder $query
+     * @param string  $column
+     * @param mixed   $value
+     *
+     * @return Builder
+     */
+    private function getBuilder(string $operator, Builder $query, string $column, mixed $value): Builder {
+        return match ($operator) {
+            'eq' => $query->where($column, '=', $value),
+            'gt' => $query->where($column, '>', $value),
+            'lt' => $query->where($column, '<', $value),
+            'gte' => $query->where($column, '>=', $value),
+            'lte' => $query->where($column, '<=', $value),
+            'ne' => $query->where($column, '!=', $value),
+            'like' => $query->where($column, 'LIKE', '%' . $value . '%'),
+            'in' => $query->whereIn($column, explode(',', $value)),
+            default => $query,
+        };
     }
 }

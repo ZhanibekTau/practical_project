@@ -3,6 +3,7 @@
 namespace App\Services\Projects;
 
 use App\Enums\AttributesEnum;
+use App\Enums\ProjectsEnum;
 use App\Exceptions\AppException;
 use App\Repositories\Attributes\AttributeRepository;
 use App\Repositories\Projects\ProjectRepository;
@@ -20,6 +21,28 @@ class ProjectService
     ) {
         $this->projectRepository = $projectRepository;
         $this->attributeRepository = $attributeRepository;
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return array
+     */
+    public function getAllProjects(array $requestData): array
+    {
+        return $this->projectRepository->getProjects($requestData);
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return mixed[]
+     */
+    public function filterProjects(array $requestData): array
+    {
+        $data = $this->getEavAttributes($requestData);
+
+        return $this->projectRepository->filter($data);
     }
 
     /**
@@ -144,9 +167,30 @@ class ProjectService
 
             default:
                 throw new AppException(
-                    message: "Unsupported attribute type: $type",
+                    message: "Unsupported attribute type: $attribute->type",
                     code: Response::HTTP_UNPROCESSABLE_ENTITY,
                 );
         }
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getEavAttributes(array $requestData): array
+    {
+        $eavAttributes = $this->attributeRepository->getAll()->pluck('name')->toArray();
+        $data = [];
+
+        foreach ($requestData["filters"] as $key => $value) {
+            if(in_array($key, $eavAttributes)) {
+                $data[ProjectsEnum::EAV_COLUMNS][$key] = $value;
+            } else {
+                $data[ProjectsEnum::REGULAR_COLUMNS][$key] = $value;
+            }
+        }
+
+        return $data;
     }
 }
