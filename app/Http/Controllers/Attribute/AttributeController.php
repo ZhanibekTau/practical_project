@@ -2,30 +2,49 @@
 
 namespace App\Http\Controllers\Attribute;
 
+use App\Exceptions\AppException;
 use App\Http\Controllers\Controller;
-use App\Models\Attribute;
+use App\Http\Requests\Attributes\CreateFormRequest;
+use App\Http\Requests\Attributes\UpdateFormRequest;
+use App\Services\Attributes\AttributeService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
     /**
-     * @param Request $request
+     * @param AttributeService $attributeService
+     */
+    public function __construct(
+        private AttributeService $attributeService,
+    ) {
+    }
+
+    /**
+     * @param CreateFormRequest $request
      *
      * @return JsonResponse
+     * @throws AppException
      */
-    public function store(Request $request)
+    public function create(CreateFormRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:text,date,number,select'
-        ]);
-        dd($validated);
-        $attribute = Attribute::updateOrCreate(
-            ['name' => $validated['name']],
-            ['type' => $validated['type']]
-        );
+        $params = $request->validated();
+        $this->attributeService->firstOrCreate($params);
 
-        return response()->json($attribute);
+        return $this->response($params);
+    }
+
+    /**
+     * @param UpdateFormRequest $request
+     * @param int               $id
+     *
+     * @return JsonResponse
+     * @throws AppException
+     */
+    public function update(UpdateFormRequest $request, int $id): JsonResponse
+    {
+        $params = $request->validated();
+        $this->attributeService->updateById($id, $params);
+
+        return $this->response();
     }
 }

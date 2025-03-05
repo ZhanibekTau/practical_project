@@ -11,25 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attributes', function (Blueprint $table) {
+        Schema::create('project_user', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type');
-            $table->timestamps();
-        });
-
-        Schema::create('attribute_values', function (Blueprint $table) {
-            $table->id();
-
-            $table->foreignIdFor(Attribute::class)
-                ->constrained()
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
-            $table->morphs('entity');
-
-            $table->string('value')->nullable();
-
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -39,7 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attribute_values');
-        Schema::dropIfExists('attributes');
+        Schema::dropIfExists('project_user');
     }
 };

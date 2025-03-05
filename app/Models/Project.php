@@ -12,11 +12,16 @@ class Project extends Model
 
     protected $fillable = ['name', 'status'];
 
-
     public function attributes()
     {
         return $this->morphMany(AttributeValue::class, 'entity');
     }
+
+    public function attributeValues()
+    {
+        return $this->morphMany(AttributeValue::class, 'entity');
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class);
