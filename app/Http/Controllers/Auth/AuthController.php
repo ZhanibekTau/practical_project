@@ -2,52 +2,57 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\AppException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginFormRequest;
 use App\Http\Requests\Auth\RegisterFormRequest;
-use App\Models\User;
+use App\Services\Auth\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(RegisterFormRequest $request)
+    /**
+     * @param AuthService $authService
+     */
+    public function __construct(
+        private AuthService $authService,
+    ) {
+
+    }
+
+    /**
+     * @param RegisterFormRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function register(RegisterFormRequest $request): JsonResponse
     {
-        $request->validated();
-
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password'=>Hash::make($request->password),
-        ]);
-
-        $token = $user->createToken('auth_token')->accessToken;
+        $token = $this->authService->create($request->validated());
 
         return $this->response($token);
     }
 
-    public function login(Request $request)
+    /**
+     * @param LoginFormRequest $request
+     *
+     * @return JsonResponse
+     * @throws AppException
+     */
+    public function login(LoginFormRequest $request): JsonResponse
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $token = $user->createToken('auth_token')->accessToken;
-
-        return response()->json(['token' => $token], 200);
+        return $this->response($this->authService->login($request->validated()));
     }
 
-    public function logout(Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->token()->revoke();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return $this->response('Successfully logged out');
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Projects;
 
 use App\Http\Requests\BaseFormRequest;
 
-class LoginFormRequest extends BaseFormRequest
+class AddUserFormRequest extends BaseFormRequest
 {
     /**
      * @return bool
@@ -17,8 +17,8 @@ class LoginFormRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
+            'user_id' => 'required|exists:users,id',
+            'project_id' => 'required|exists:projects,id',
         ];
     }
 }

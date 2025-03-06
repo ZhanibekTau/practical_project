@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Projects;
 
 use App\Exceptions\AppException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Projects\AddUserFormRequest;
 use App\Http\Requests\Projects\CreateFormRequest;
 use App\Http\Requests\Projects\UpdateFormRequest;
 use App\Services\Projects\ProjectService;
@@ -18,8 +19,7 @@ class ProjectController extends Controller
      */
     public function __construct(
         private ProjectService $projectService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param Request $request
@@ -28,7 +28,9 @@ class ProjectController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        return $this->response($this->projectService->getAllProjects($request->all()));
+        return $this->response(
+            $this->projectService->getAllProjects($request->all()),
+        );
     }
 
     /**
@@ -38,7 +40,9 @@ class ProjectController extends Controller
      */
     public function filter(Request $request): JsonResponse
     {
-        return $this->response($this->projectService->filterProjects($request->all()));
+        return $this->response(
+            $this->projectService->filterProjects($request->all()),
+        );
     }
 
     /**
@@ -63,8 +67,24 @@ class ProjectController extends Controller
      */
     public function update(UpdateFormRequest $request, int $id): JsonResponse
     {
-        $result = $this->projectService->update($id,  $request->validated());
+        $result = $this->projectService->update($id, $request->validated());
 
         return $this->response($result);
     }
+
+    public function addUserToProject(AddUserFormRequest $request): JsonResponse
+    {
+        return $this->response($this->projectService->attachUser($request->validated()));
+    }
+
+    /**
+     * @param AddUserFormRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function deleteUserFromProject(AddUserFormRequest $request): JsonResponse
+    {
+        return $this->response($this->projectService->detachUser($request->validated()));
+    }
+
 }

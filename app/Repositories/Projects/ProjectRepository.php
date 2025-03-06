@@ -6,6 +6,7 @@ use App\Enums\ProjectsEnum;
 use App\Exceptions\AppException;
 use App\Models\Project;
 use App\Repositories\Eloquent\IBaseRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -162,6 +163,31 @@ class ProjectRepository implements IBaseRepository
         }
 
         return $query->with('attributes.attribute')->get()->toArray();
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Model|null
+     */
+    public function attachUser(array $data): ?Model
+    {
+        $model = $this->find($data['project_id']);
+        return $model->users()->attach($data['user_id'], [
+            'created_at'=> Carbon::now(),
+            'updated_at'=> Carbon::now(),
+        ]);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return int
+     */
+    public function detachUser(array $data): int
+    {
+        $model = $this->find($data['project_id']);
+        return $model->users()->detach($data['user_id']);
     }
 
     /**

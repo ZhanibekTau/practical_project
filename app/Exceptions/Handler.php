@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -63,6 +64,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof AuthorizationException) {
             return Response::HTTP_FORBIDDEN; // 403
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            return Response::HTTP_UNAUTHORIZED; // 403
         }
 
         return Response::HTTP_INTERNAL_SERVER_ERROR; // 500

@@ -193,4 +193,24 @@ class ProjectService
 
         return $data;
     }
+
+    /**
+     * @param array $data
+     *
+     * @return Model|null
+     */
+    public function attachUser(array $data): ?Model
+    {
+        return $this->projectRepository->attachUser($data);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return int
+     */
+    public function detachUser(array $data): int
+    {
+        return $this->projectRepository->detachUser($data);
+    }
 }
