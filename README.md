@@ -41,7 +41,7 @@ php artisan db:seed
 
 ## Test Credentials
 - Use the provided test credentials to access the application during testing.
-- **email:** testuser
+- **email:** testuser@example.com
 - **Password:** Test@1234
 - **CURL:** curl --location 'http://localhost/practical_project/login' \
   --header 'Content-Type: application/json' \

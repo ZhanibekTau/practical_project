@@ -22,6 +22,7 @@ class ProjectFactory extends Factory
         return [
             'name' => $this->faker->company(),
             'status' => $this->faker->randomElement(['active', 'completed', 'planned']),
+            'created_by' => $this->faker->numberBetween(1, 5),
         ];
     }
 }
