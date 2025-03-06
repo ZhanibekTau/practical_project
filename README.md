@@ -35,6 +35,9 @@ php artisan db:seed
 
 ## API Documentation
 - Swagger UI: [Swagger Documentation](http://localhost/api/documentation)
+- 
+## SQL Dump
+- Check the `/database_dump.sql` file in the project
 
 ## Example Requests
 - CURL Collection: Check the `/collection` folder in the project
