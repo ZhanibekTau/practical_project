@@ -67,6 +67,7 @@ class TimesheetController extends Controller
      * @param int $id
      *
      * @return JsonResponse
+     * @throws AppException
      */
     public function show(int $id): JsonResponse
     {

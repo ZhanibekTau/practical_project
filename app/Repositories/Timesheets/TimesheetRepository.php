@@ -8,7 +8,7 @@ use App\Repositories\Eloquent\IBaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 
-class TimesheetsRepository implements IBaseRepository
+class TimesheetRepository implements IBaseRepository
 {
     protected Timesheet $model;
 
@@ -20,9 +20,9 @@ class TimesheetsRepository implements IBaseRepository
     /**
      * @param array $attributes
      *
-     * @return Timesheet
+     * @return Model
      */
-    public function create(array $attributes): Timesheet
+    public function create(array $attributes): Model
     {
         return $this->model->create($attributes);
     }
@@ -60,11 +60,11 @@ class TimesheetsRepository implements IBaseRepository
     /**
      * @param int $id
      *
-     * @return Timesheet|null
+     * @return Model|null
      */
-    public function find(int $id): ?Timesheet
+    public function find(int $id): ?Model
     {
-        return $this->model->find($id)->first();
+        return $this->model->find($id);
     }
 
     /**

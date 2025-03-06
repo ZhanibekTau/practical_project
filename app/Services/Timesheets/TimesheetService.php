@@ -3,14 +3,15 @@
 namespace App\Services\Timesheets;
 
 use App\Exceptions\AppException;
-use App\Repositories\Timesheets\TimesheetsRepository;
+use App\Repositories\Timesheets\TimesheetRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 
 class TimesheetService
 {
-    protected TimesheetsRepository $timesheetsRepository;
+    protected TimesheetRepository $timesheetsRepository;
 
-    public function __construct(TimesheetsRepository $timesheetsRepository)
+    public function __construct(TimesheetRepository $timesheetsRepository)
     {
         $this->timesheetsRepository = $timesheetsRepository;
     }
@@ -58,10 +59,15 @@ class TimesheetService
     /**
      * @param int $id
      *
-     * @return Model
+     * @return Model|null
+     * @throws AppException
      */
-    public function getById(int $id): Model
+    public function getById(int $id): ?Model
     {
-        return $this->timesheetsRepository->find($id);
+        try{
+            return $this->timesheetsRepository->find($id);
+        } catch (\Exception $e){
+            throw new AppException($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
     }
 }
