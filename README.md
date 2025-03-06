@@ -34,7 +34,7 @@ php artisan db:seed
 ```
 
 ## API Documentation
-- Swagger UI: [Swagger Documentation](http://localhost:your-port/swagger)
+- Swagger UI: [Swagger Documentation](http://localhost/api/documentation)
 
 ## Example Requests
 - CURL Collection: Check the `/collection` folder in the project

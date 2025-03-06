@@ -11,7 +11,6 @@ use App\Services\Projects\ProjectService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class ProjectController extends Controller
 {
     /**
@@ -72,6 +71,11 @@ class ProjectController extends Controller
         return $this->response($result);
     }
 
+    /**
+     * @param AddUserFormRequest $request
+     *
+     * @return JsonResponse
+     */
     public function addUserToProject(AddUserFormRequest $request): JsonResponse
     {
         return $this->response($this->projectService->attachUser($request->validated()));
@@ -86,5 +90,4 @@ class ProjectController extends Controller
     {
         return $this->response($this->projectService->detachUser($request->validated()));
     }
-
 }

@@ -1,0 +1,968 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Practical Project (API)",
+        "description": "Service for practical use",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/practical_project/api/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get list of all projects",
+                "operationId": "202daee41be1d173f0ae9b2b8dfaed86",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page (or 'all' to fetch all items)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "10",
+                                "20",
+                                "50",
+                                "100",
+                                "all"
+                            ],
+                            "example": "10"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Samsung"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "planned"
+                                                    },
+                                                    "created_by": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "updated_by": {
+                                                        "type": "integer",
+                                                        "example": 1,
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:34:15.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:58:43.000000Z"
+                                                    },
+                                                    "attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "attribute_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "entity_type": {
+                                                                    "type": "string",
+                                                                    "example": "App\\\\Models\\\\Project"
+                                                                },
+                                                                "entity_id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "value": {
+                                                                    "type": "string",
+                                                                    "example": "2025-10-29"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "attribute": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "start_date"
+                                                                        },
+                                                                        "type": {
+                                                                            "type": "string",
+                                                                            "example": "date"
+                                                                        },
+                                                                        "created_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        },
+                                                                        "updated_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid pagination parameters"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerToken": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Create a new project",
+                "operationId": "95344319893dc85129b9f9318098cc2b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateFormRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Samsung"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "planned"
+                                                    },
+                                                    "created_by": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "updated_by": {
+                                                        "type": "integer",
+                                                        "example": 1,
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:34:15.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:58:43.000000Z"
+                                                    },
+                                                    "attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "attribute_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "entity_type": {
+                                                                    "type": "string",
+                                                                    "example": "App\\\\Models\\\\Project"
+                                                                },
+                                                                "entity_id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "value": {
+                                                                    "type": "string",
+                                                                    "example": "2025-10-29"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "attribute": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "start_date"
+                                                                        },
+                                                                        "type": {
+                                                                            "type": "string",
+                                                                            "example": "date"
+                                                                        },
+                                                                        "created_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        },
+                                                                        "updated_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/practical_project/api/projects/filter": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Filter projects by attributes",
+                "description": "Filter projects using EAV attributes with various comparison operators such as eq, gt, lt, gte, lte, ne, like, in.",
+                "operationId": "19ba5e1da66f254f505cd5e0f3a469c8",
+                "parameters": [
+                    {
+                        "name": "filters[name][like]",
+                        "in": "query",
+                        "description": "Filter projects by name using 'LIKE' operator. Example: filters[name][like]=HP",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "HP"
+                        }
+                    },
+                    {
+                        "name": "filters[status][eq]",
+                        "in": "query",
+                        "description": "Exact match for status. Example: filters[status][eq]=active",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "active"
+                        }
+                    },
+                    {
+                        "name": "filters[id][gt]",
+                        "in": "query",
+                        "description": "Filter by ID greater than a value. Example: filters[id][gt]=10",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "filters[created_at][lte]",
+                        "in": "query",
+                        "description": "Filter by created_at date less than or equal to a specific date. Example: filters[created_at][lte]=2024-01-01",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        }
+                    },
+                    {
+                        "name": "filters[category][in]",
+                        "in": "query",
+                        "description": "Filter by category in a list. Example: filters[category][in]=IT,Finance,Marketing",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "IT,Finance,Marketing"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Samsung"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "planned"
+                                                    },
+                                                    "created_by": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "updated_by": {
+                                                        "type": "integer",
+                                                        "example": 1,
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:34:15.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:58:43.000000Z"
+                                                    },
+                                                    "attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "attribute_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "entity_type": {
+                                                                    "type": "string",
+                                                                    "example": "App\\\\Models\\\\Project"
+                                                                },
+                                                                "entity_id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "value": {
+                                                                    "type": "string",
+                                                                    "example": "2025-10-29"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "attribute": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "start_date"
+                                                                        },
+                                                                        "type": {
+                                                                            "type": "string",
+                                                                            "example": "date"
+                                                                        },
+                                                                        "created_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        },
+                                                                        "updated_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filter parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid filter operator provided"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/practical_project/api/projects/delete-user": {
+            "delete": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Delete a user from a project",
+                "description": "Remove a user from a specific project by providing the user and project IDs.",
+                "operationId": "053b932b1c3a1e4afb1a94ea53e41b2f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddUserFormRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User deleted from project successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User deleted from project successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User or project not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User or project not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation errors."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/practical_project/api/projects/{id}": {
+            "put": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Update a project",
+                "operationId": "9335bab9e6f618e3bbcf80693e2b224e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateFormRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Samsung"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "planned"
+                                                    },
+                                                    "created_by": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "updated_by": {
+                                                        "type": "integer",
+                                                        "example": 1,
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:34:15.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-05T14:58:43.000000Z"
+                                                    },
+                                                    "attributes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "attribute_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "entity_type": {
+                                                                    "type": "string",
+                                                                    "example": "App\\\\Models\\\\Project"
+                                                                },
+                                                                "entity_id": {
+                                                                    "type": "integer",
+                                                                    "example": 2
+                                                                },
+                                                                "value": {
+                                                                    "type": "string",
+                                                                    "example": "2025-10-29"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2025-03-05T14:34:15.000000Z"
+                                                                },
+                                                                "attribute": {
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "start_date"
+                                                                        },
+                                                                        "type": {
+                                                                            "type": "string",
+                                                                            "example": "date"
+                                                                        },
+                                                                        "created_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        },
+                                                                        "updated_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time",
+                                                                            "example": "2025-03-05T14:33:13.000000Z"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/practical_projectapi/projects/add-user": {
+            "post": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Add a user to a project",
+                "operationId": "7a381a559613de053efa3162309027db",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddUserFormRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User added to project successfully"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Project": {
+                "title": "Project Model",
+                "description": "Project data",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Project ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Project name",
+                        "type": "string",
+                        "example": "My First Project"
+                    },
+                    "description": {
+                        "description": "Project description",
+                        "type": "string",
+                        "example": "This is a sample project"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-02T15:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "AddUserFormRequest": {
+                "required": [
+                    "user_id",
+                    "project_id"
+                ],
+                "properties": {
+                    "user_id": {
+                        "description": "ID of the user to be added to the project",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "project_id": {
+                        "description": "ID of the project where the user will be added",
+                        "type": "integer",
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "CreateFormRequest": {
+                "required": [
+                    "name",
+                    "status",
+                    "created_by",
+                    "attributes"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the project",
+                        "type": "string",
+                        "example": "Project Name"
+                    },
+                    "status": {
+                        "description": "Project status",
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "completed",
+                            "planned"
+                        ],
+                        "example": "active"
+                    },
+                    "created_by": {
+                        "description": "ID of the user who created the project",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "attributes": {
+                        "required": [
+                            "id",
+                            "value"
+                        ],
+                        "properties": {
+                            "id": {
+                                "description": "ID of the attribute",
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "value": {
+                                "description": "Value of the attribute",
+                                "type": "string",
+                                "example": "Attribute Value"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "status_for_bank": {
+                        "description": "Status of the project for the bank",
+                        "type": "string",
+                        "example": "DELIVERED"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateFormRequest": {
+                "required": [
+                    "updated_by"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the project",
+                        "type": "string",
+                        "example": "Updated Project Name"
+                    },
+                    "status": {
+                        "description": "Project status",
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "completed",
+                            "planned"
+                        ],
+                        "example": "active"
+                    },
+                    "updated_by": {
+                        "description": "ID of the user who updated the project",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "attributes": {
+                        "properties": {
+                            "id": {
+                                "description": "ID of the attribute",
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "value": {
+                                "description": "Value of the attribute",
+                                "type": "string",
+                                "example": "Updated Attribute Value"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "BearerToken": {
+                "type": "http",
+                "description": "Enter 'Bearer' [space] and then your token. Example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+                "bearerFormat": "JWT",
+                "scheme": "passport laravel"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Projects",
+            "description": "Projects"
+        }
+    ]
+}

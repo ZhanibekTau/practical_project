@@ -72,8 +72,31 @@ services:
             db:
                 condition: service_healthy
         command: >
-            sh -c "php artisan passport:keys --force && chmod -R 775 /var/www/storage && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && php artisan migrate --force && php artisan passport:client --personal && php-fpm"
+            sh -c "
+                # Generate Passport keys
+                php artisan passport:keys --force &&
 
+                # Set permissions for the storage directory
+                chmod -R 775 /var/www/storage &&
+
+                # Set ownership for storage and cache directories
+                chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
+
+                # Run database migrations
+                php artisan migrate --force &&
+
+                # Create a personal access client for Passport
+                php artisan passport:client --personal &&
+
+                # Publish Swagger configuration and assets
+                php artisan vendor:publish --provider='L5Swagger\L5SwaggerServiceProvider' &&
+
+                # Generate Swagger documentation
+                php artisan l5-swagger:generate &&
+
+                # Start PHP-FPM
+                php-fpm
+            "
 
 volumes:
     db_data:
