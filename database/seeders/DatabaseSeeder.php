@@ -17,14 +17,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(10)->create();
-        $projects = Project::factory(5)->create();
+        $testUser = User::factory()->create([
+            'first_name' => 'Test',
+            'last_name' => 'User',
+            'email' => 'testuser@example.com',
+            'password' => bcrypt('Test@1234'),
+        ]);
 
-        foreach ($projects as $project) {
-            $project->users()->attach($users->random(rand(1, 5)), [
+        $users = User::factory(9)->create();
+
+        $project = Project::factory()->create([
+            'name' => 'Test Project',
+        ]);
+
+        $project->users()->attach($testUser, [
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $additionalProjects = Project::factory(4)->create();
+
+        foreach ($additionalProjects as $additionalProject) {
+            $additionalProject->users()->attach($users->random(rand(1, 5)), [
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);;
+            ]);
         }
 
         $attributes = [
@@ -35,13 +52,20 @@ class DatabaseSeeder extends Seeder
             ['name' => 'priority', 'type' => 'select'],
         ];
 
-
         foreach ($attributes as $attribute) {
             Attribute::create($attribute);
         }
 
-        AttributeValue::factory(20)->create();
+        AttributeValue::factory()->create([
+            'attribute_id' => 1,
+            'value' => 'Test Department',
+        ]);
 
-        Timesheet::factory(30)->create();
+        Timesheet::factory()->create([
+            'user_id' => $testUser->id,
+            'project_id' => $project->id,
+            'hours' => 8,
+            'date' => now()->format('Y-m-d'),
+        ]);
     }
 }

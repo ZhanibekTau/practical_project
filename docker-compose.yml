@@ -94,6 +94,8 @@ services:
                 # Generate Swagger documentation
                 php artisan l5-swagger:generate &&
 
+                php artisan db:seed &&
+
                 # Start PHP-FPM
                 php-fpm
             "
